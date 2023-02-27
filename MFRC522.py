@@ -127,9 +127,9 @@ class MFRC522:
     
   serNum = []
   
-  def __init__(self, dev='/dev/spidev0.0', spd=1000000):
+  def __init__(self, bs=0, dev=0, spd=1000000):
     self.spi = spidev.SpiDev()
-    self.spi.open(device=dev,speed=spd)
+    self.spi.open(bus=bs, device=dev)
     self.spi.max_speed_hz = spd
 
     GPIO.setmode(GPIO.BOARD)
@@ -146,7 +146,7 @@ class MFRC522:
   
   def Read_MFRC522(self, addr):
     to_send = (((addr<<1)&0x7E) | 0x80,0)
-    self.spi.xfer(to_send)
+    val = self.spi.xfer(to_send)
     return val[1]
   
   def SetBitMask(self, reg, mask):
